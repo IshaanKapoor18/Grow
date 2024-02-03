@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node Backend/server.js",
-    "dev": "nodemon Backend/server.js --ignore client"
+    "dev": "nodemon Backend/server.js --ignore client",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Ishaan",
   "license": "ISC",

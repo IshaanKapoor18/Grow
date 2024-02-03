@@ -5,6 +5,8 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
+const path = require("path")
+
 const app = express();
 dotenv.config();
 
@@ -12,10 +14,7 @@ connectDB();
 
 app.use(express.json());        //to accept any json data
 
-// app.get("/grow/chat", (req, res) => {
-//     const data = [{name: "name1", id: "167"}, {name: "name2", id: "17"}]
-//     res.send(data)
-// })
+
 
 
 app.get("/grow/chat/:id", (req, res) => {
@@ -23,13 +22,31 @@ app.get("/grow/chat/:id", (req, res) => {
     res.send(req.params.id);
 })
 
-app.get("/grow", (req, res) => {
-    res.send("Get home ");
-})
+
 
 app.use("/grow/user", userRoutes);
 app.use("/grow/chat", chatRoutes);
 app.use("/grow/message", messageRoutes);
+
+// Deployment 
+
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname1, "/frontend/build")))
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
+    })
+} else {
+        app.get("/grow", (req, res) => {
+        res.send("Get home ");
+    })
+}
+    
+    
+// Deployment 
+
+
+
 
 app.use(notFound);
 app.use(errorHandler);
